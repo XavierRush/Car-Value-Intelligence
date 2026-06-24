@@ -1,20 +1,32 @@
 # Car Value Intelligence
 
-A simple command-line Python script that estimates a car's value based on its purchase price, age, and mileage.
+This project is a beginner-friendly Flask app that estimates a car's value based on price, age, mileage, and vehicle type.
+
+## Files
+
+- app.py
+- requirements.txt
+- database/cars.db
+- utils/depreciation.py
+- utils/ownership.py
+- utils/recommendations.py
+- utils/database.py
+- templates/index.html
+- templates/results.html
+- static/style.css
 
 ## Usage
 
-Run the script with Python:
+Install the requirements:
 
 ```bash
-python car-value-estimator.py
+pip install -r requirements.txt
 ```
 
-You will be prompted to enter:
-- Car make
-- Car model
-- Original purchase price
-- Car age in years
-- Mileage
+Run the app:
 
-The script will print an estimated value for the vehicle.
+```bash
+python app.py
+```
+
+Then open your browser and go to the local address shown in the terminal.
