@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Car Value Estimator</title>
+</head>
+
+<body>
+
+    <h1>Car Value Estimator</h1>
+
+    <form method="POST">
+
+        <label>Make:</label>
+        <input type="text" name="make" required>
+
+        <br><br>
+
+        <label>Model:</label>
+        <input type="text" name="model" required>
+
+        <br><br>
+
+        <label>Original Price:</label>
+        <input type="number" name="price" required>
+
+        <br><br>
+
+        <label>Age (years):</label>
+        <input type="number" name="age" required>
+
+        <br><br>
+
+        <label>Mileage:</label>
+        <input type="number" name="mileage" required>
+
+        <br><br>
+
+        <button type="submit">Calculate</button>
+
+    </form>
+
+    {% if car_value %}
+
+    <h2>Estimated Value</h2>
+    <p>${{ car_value }}</p>
+
+    {% endif %}
+
+</body>
+
+</html>
