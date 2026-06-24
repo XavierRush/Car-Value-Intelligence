@@ -16,7 +16,7 @@ value = value - (miles * 0.05)
 
 if value < 0:
     value = 0
-
+    
 print()
 print("----- Results -----")
 print("Car:", make, model)
