@@ -1,27 +1,255 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Car Value Results</title>
-</head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Value Results</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    body {
+      min-height: 100vh;
+      background: #f0f0f0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 720px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      display: flex;
+    }
+
+    /* Left dark panel */
+    .side-panel {
+      width: 45%;
+      background: #1a1a2e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .side-panel svg {
+      width: 56px; height: 56px;
+      margin-bottom: 1.25rem;
+      opacity: 0.9;
+    }
+
+    .side-panel .big-value {
+      font-size: 42px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .side-panel .car-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 1.5rem;
+    }
+
+    .rec-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .rec-badge.high     { background: #ef4444; color: #fff; }
+    .rec-badge.medium   { background: #f59e0b; color: #000; }
+    .rec-badge.low      { background: #3b82f6; color: #fff; }
+    .rec-badge.none     { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.7); }
+
+    .rec-reason {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+    }
+
+    /* Right content panel */
+    .main-panel {
+      width: 55%;
+      padding: 2rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      overflow-y: auto;
+    }
+
+    .section-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #aaa;
+      margin-bottom: 6px;
+    }
+
+    /* AI Narrative */
+    .narrative-box {
+      background: #f7f7f7;
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      font-size: 13px;
+      color: #444;
+      line-height: 1.7;
+      border-left: 3px solid #1a1a2e;
+    }
+
+    /* Breakdown rows */
+    .breakdown {
+      background: #f7f7f7;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 4px 0;
+      color: #888;
+    }
+
+    .breakdown-row span:last-child {
+      color: #1a1a2e;
+      font-weight: 600;
+    }
+
+    .breakdown-total {
+      border-top: 1px solid #e5e5e5;
+      margin-top: 6px;
+      padding-top: 6px;
+    }
+
+    .breakdown-total span {
+      color: #1a1a2e !important;
+      font-weight: 700 !important;
+      font-size: 13px !important;
+    }
+
+    /* Back button */
+    .back-btn {
+      background: transparent;
+      border: 1px solid #ddd;
+      color: #888;
+      padding: 8px 20px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+      margin-top: auto;
+    }
+
+    .back-btn:hover { background: #f0f0f0; color: #1a1a2e; }
+  </style>
+</head>
 <body>
 
-    <h1>Results</h1>
+<div class="container">
 
-    <p>Estimated Value: ${{ value }}</p>
-    <p>Estimated Yearly Costs:</p>
-    <ul>
-        <li>Fuel: ${{ costs["fuel"] }}</li>
-        <li>Maintenance: ${{ costs["maintenance"] }}</li>
-        <li>Insurance: ${{ costs["insurance"] }}</li>
-        <li>Total: ${{ costs["total"] }}</li>
-    </ul>
+  <!-- Left: Value + Recommendation -->
+  <div class="side-panel">
+    <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="56" height="56" rx="16" fill="rgba(255,255,255,0.08)"/>
+      <path d="M10 30l4-10h28l4 10" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+      <rect x="8" y="30" width="40" height="10" rx="3" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
+      <circle cx="17" cy="42" r="3.5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+      <circle cx="39" cy="42" r="3.5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+    </svg>
 
-    <p>Recommendation: {{ recommendation }}</p>
+    <div class="big-value">${{ "{:,.0f}".format(value) }}</div>
+    <div class="car-label">{{ make }} {{ model }} · Estimated Value</div>
 
-    <a href="/">Go back</a>
+    <span class="rec-badge {{ recommendation.urgency }}">
+      {{ recommendation.recommendation }}
+    </span>
+    <p class="rec-reason">{{ recommendation.reason }}</p>
+  </div>
+
+  <!-- Right: Details -->
+  <div class="main-panel">
+
+    {% if narrative %}
+    <div>
+      <div class="section-title">Why your car is worth this</div>
+      <div class="narrative-box">{{ narrative }}</div>
+    </div>
+    {% endif %}
+
+    <div>
+      <div class="section-title">Depreciation Breakdown</div>
+      <div class="breakdown">
+        <div class="breakdown-row">
+          <span>Original price</span>
+          <span>${{ "{:,.0f}".format(costs.get("original_price", 0) if costs.get("original_price") else 0) }}</span>
+        </div>
+        <div class="breakdown-row">
+          <span>Estimated current value</span>
+          <span>${{ "{:,.0f}".format(value) }}</span>
+        </div>
+        <div class="breakdown-row breakdown-total">
+          <span>Value retained</span>
+          <span>
+            {% if costs.get("original_price") %}
+              {{ "{:.0f}".format((value / costs["original_price"]) * 100) }}%
+            {% else %}
+              —
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Annual Ownership Costs</div>
+      <div class="breakdown">
+        <div class="breakdown-row">
+          <span>Fuel</span>
+          <span>${{ "{:,.0f}".format(costs["fuel"]) }}</span>
+        </div>
+        <div class="breakdown-row">
+          <span>Maintenance</span>
+          <span>${{ "{:,.0f}".format(costs["maintenance"]) }}</span>
+        </div>
+        <div class="breakdown-row">
+          <span>Insurance (est.)</span>
+          <span>${{ "{:,.0f}".format(costs["insurance"]) }}</span>
+        </div>
+        <div class="breakdown-row">
+          <span>Registration</span>
+          <span>${{ "{:,.0f}".format(costs["registration"]) }}</span>
+        </div>
+        <div class="breakdown-row breakdown-total">
+          <span>Total / year</span>
+          <span>${{ "{:,.0f}".format(costs["total_annual"]) }}</span>
+        </div>
+        <div class="breakdown-row">
+          <span>Cost per month</span>
+          <span>${{ "{:,.0f}".format(costs["cost_per_month"]) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <a class="back-btn" href="/">← Recalculate</a>
+
+  </div>
+</div>
 
 </body>
-
 </html>
