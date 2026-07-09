@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Car Value Estimator</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       min-height: 100vh;
@@ -26,12 +31,13 @@
       max-width: 720px;
       min-height: 500px;
       display: flex;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     }
 
     .form-panel {
       position: absolute;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 55%;
       height: 100%;
       display: flex;
@@ -39,13 +45,14 @@
       align-items: center;
       justify-content: center;
       padding: 2rem 1.75rem;
-      transition: transform 0.6s cubic-bezier(.77,0,.18,1), opacity 0.4s;
+      transition: transform 0.6s cubic-bezier(.77, 0, .18, 1), opacity 0.4s;
       z-index: 1;
     }
 
     .result-panel {
       position: absolute;
-      top: 0; left: 55%;
+      top: 0;
+      left: 55%;
       width: 45%;
       height: 100%;
       display: flex;
@@ -56,7 +63,7 @@
       opacity: 0;
       pointer-events: none;
       transform: translateX(40px);
-      transition: transform 0.6s cubic-bezier(.77,0,.18,1), opacity 0.4s;
+      transition: transform 0.6s cubic-bezier(.77, 0, .18, 1), opacity 0.4s;
       z-index: 1;
     }
 
@@ -74,7 +81,8 @@
 
     .toggle-panel {
       position: absolute;
-      right: 0; top: 0;
+      right: 0;
+      top: 0;
       width: 45%;
       height: 100%;
       background: #1a1a2e;
@@ -85,7 +93,7 @@
       padding: 2rem;
       z-index: 10;
       border-radius: 0 16px 16px 0;
-      transition: transform 0.6s cubic-bezier(.77,0,.18,1);
+      transition: transform 0.6s cubic-bezier(.77, 0, .18, 1);
     }
 
     .container.show-result .toggle-panel {
@@ -109,7 +117,7 @@
     }
 
     .toggle-panel p {
-      color: rgba(255,255,255,0.65);
+      color: rgba(255, 255, 255, 0.65);
       font-size: 13px;
       text-align: center;
       line-height: 1.7;
@@ -118,7 +126,7 @@
 
     .toggle-btn {
       background: transparent;
-      border: 1.5px solid rgba(255,255,255,0.55);
+      border: 1.5px solid rgba(255, 255, 255, 0.55);
       color: #fff;
       padding: 8px 24px;
       border-radius: 20px;
@@ -128,7 +136,9 @@
       display: none;
     }
 
-    .toggle-btn:hover { background: rgba(255,255,255,0.15); }
+    .toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
 
     .form-panel h2 {
       font-size: 20px;
@@ -173,8 +183,14 @@
       background: #fff;
     }
 
-    .row { display: flex; gap: 10px; }
-    .row .field { flex: 1; }
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row .field {
+      flex: 1;
+    }
 
     .submit-btn {
       width: 100%;
@@ -190,7 +206,9 @@
       transition: opacity 0.2s;
     }
 
-    .submit-btn:hover { opacity: 0.85; }
+    .submit-btn:hover {
+      opacity: 0.85;
+    }
 
     .result-panel h2 {
       font-size: 18px;
@@ -267,6 +285,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="container" id="container">
@@ -275,44 +294,50 @@
     <div class="form-panel">
       <h2>Car Value Estimator</h2>
 
-      <div class="row">
-        <div class="field">
-          <label>Make</label>
-          <input type="text" id="make" placeholder="e.g. Toyota">
+      <form action="/" method="post">
+        <div class="row">
+          <div class="field">
+            <label>Make</label>
+            <input type="text" name="make" placeholder="e.g. Toyota" required>
+          </div>
+          <div class="field">
+            <label>Model</label>
+            <input type="text" name="model" placeholder="e.g. Camry" required>
+          </div>
         </div>
+
         <div class="field">
-          <label>Model</label>
-          <input type="text" id="model" placeholder="e.g. Camry">
+          <label>Original Price ($)</label>
+          <input type="number" name="price" placeholder="e.g. 30000" required>
         </div>
-      </div>
 
-      <div class="field">
-        <label>Original Price ($)</label>
-        <input type="number" id="price" placeholder="e.g. 30000">
-      </div>
+        <div class="row">
+          <div class="field">
+            <label>Age (years)</label>
+            <input type="number" name="age" placeholder="e.g. 5" required>
+          </div>
+          <div class="field">
+            <label>Mileage</label>
+            <input type="number" name="mileage" placeholder="e.g. 60000" required>
+          </div>
+        </div>
 
-      <div class="row">
         <div class="field">
-          <label>Age (years)</label>
-          <input type="number" id="age" placeholder="e.g. 5">
+          <label>Vehicle Type</label>
+          <select name="vehicle_type">
+            <option value="sedan">Sedan</option>
+            <option value="suv">SUV</option>
+            <option value="truck">Truck</option>
+            <option value="luxury">Luxury</option>
+          </select>
         </div>
-        <div class="field">
-          <label>Mileage</label>
-          <input type="number" id="mileage" placeholder="e.g. 60000">
-        </div>
-      </div>
 
-      <div class="field">
-        <label>Vehicle Type</label>
-        <select id="vehicle_type">
-          <option value="sedan">Sedan</option>
-          <option value="suv">SUV</option>
-          <option value="truck">Truck</option>
-          <option value="luxury">Luxury</option>
-        </select>
-      </div>
+        <button class="submit-btn" type="submit">Calculate Value</button>
+      </form>
 
-      <button class="submit-btn" id="calcBtn">Calculate Value</button>
+      <p style="margin-top: 1rem; font-size: 13px; color: #666;">
+        <a href="/history" style="color: #1a1a2e; text-decoration: none;">View past queries</a>
+      </p>
     </div>
 
     <!-- Result Panel -->
@@ -326,12 +351,15 @@
 
     <div class="toggle-panel" id="togglePanel">
       <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="56" height="56" rx="16" fill="rgba(255,255,255,0.08)"/>
-        <path d="M10 30l4-10h28l4 10" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-        <rect x="8" y="30" width="40" height="10" rx="3" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
-        <circle cx="17" cy="42" r="3.5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
-        <circle cx="39" cy="42" r="3.5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
-        <path d="M15 28l2.5-6h21l2.5 6H15z" fill="rgba(255,255,255,0.12)"/>
+        <rect width="56" height="56" rx="16" fill="rgba(255,255,255,0.08)" />
+        <path d="M10 30l4-10h28l4 10" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" />
+        <rect x="8" y="30" width="40" height="10" rx="3" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)"
+          stroke-width="1.2" />
+        <circle cx="17" cy="42" r="3.5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)"
+          stroke-width="1.2" />
+        <circle cx="39" cy="42" r="3.5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)"
+          stroke-width="1.2" />
+        <path d="M15 28l2.5-6h21l2.5 6H15z" fill="rgba(255,255,255,0.12)" />
       </svg>
       <h2 id="toggleTitle">Know Your Car's Worth</h2>
       <p id="toggleDesc">Fill in your vehicle details and we'll estimate its current market value instantly.</p>
@@ -342,8 +370,8 @@
 
   <script>
     const container = document.getElementById('container');
-    const calcBtn   = document.getElementById('calcBtn');
-    const backBtn   = document.getElementById('backBtn');
+    const calcBtn = document.getElementById('calcBtn');
+    const backBtn = document.getElementById('backBtn');
     const toggleBtn = document.getElementById('toggleBtn');
 
     function depreciationRate(type) {
@@ -351,34 +379,34 @@
     }
 
     function mileageFactor(mileage) {
-      if (mileage < 30000)  return 1.02;
-      if (mileage < 60000)  return 1.00;
+      if (mileage < 30000) return 1.02;
+      if (mileage < 60000) return 1.00;
       if (mileage < 100000) return 0.93;
       if (mileage < 150000) return 0.84;
       return 0.72;
     }
 
     function calculate() {
-      const price   = parseFloat(document.getElementById('price').value);
-      const age     = parseInt(document.getElementById('age').value);
+      const price = parseFloat(document.getElementById('price').value);
+      const age = parseInt(document.getElementById('age').value);
       const mileage = parseInt(document.getElementById('mileage').value);
-      const type    = document.getElementById('vehicle_type').value;
-      const make    = document.getElementById('make').value.trim();
-      const model   = document.getElementById('model').value.trim();
+      const type = document.getElementById('vehicle_type').value;
+      const make = document.getElementById('make').value.trim();
+      const model = document.getElementById('model').value.trim();
 
       if (!price || isNaN(age) || isNaN(mileage)) {
         alert('Please fill in all required fields.');
         return;
       }
 
-      const rate      = depreciationRate(type);
+      const rate = depreciationRate(type);
       const ageFactor = Math.pow(1 - rate, age);
-      const mFactor   = mileageFactor(mileage);
+      const mFactor = mileageFactor(mileage);
       const estimated = Math.round(price * ageFactor * mFactor);
 
       const retainPct = Math.round((estimated / price) * 100);
-      const ageLoss   = Math.round(price * (1 - ageFactor));
-      const mileLoss  = Math.round(price * ageFactor * (1 - mFactor));
+      const ageLoss = Math.round(price * (1 - ageFactor));
+      const mileLoss = Math.round(price * ageFactor * (1 - mFactor));
 
       document.getElementById('resultVal').textContent = '$' + estimated.toLocaleString();
       document.getElementById('resultCar').textContent = [make, model].filter(Boolean).join(' ')
@@ -392,7 +420,7 @@
       `;
 
       document.getElementById('toggleTitle').textContent = 'Great estimate!';
-      document.getElementById('toggleDesc').textContent  = "Your vehicle's current market value has been calculated based on depreciation and mileage.";
+      document.getElementById('toggleDesc').textContent = "Your vehicle's current market value has been calculated based on depreciation and mileage.";
       document.getElementById('toggleBtn').style.display = 'block';
 
       container.classList.add('show-result');
@@ -401,7 +429,7 @@
     function goBack() {
       container.classList.remove('show-result');
       document.getElementById('toggleTitle').textContent = "Know Your Car's Worth";
-      document.getElementById('toggleDesc').textContent  = "Fill in your vehicle details and we'll estimate its current market value instantly.";
+      document.getElementById('toggleDesc').textContent = "Fill in your vehicle details and we'll estimate its current market value instantly.";
       document.getElementById('toggleBtn').style.display = 'none';
     }
 
@@ -411,4 +439,5 @@
   </script>
 
 </body>
+
 </html>

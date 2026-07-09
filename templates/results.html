@@ -3,24 +3,78 @@
 
 <head>
     <title>Car Value Results</title>
+    <style>
+        body {
+            font-family: Georgia, serif;
+            margin: 40px auto;
+            max-width: 760px;
+            line-height: 1.6;
+            color: #222;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #fafafa;
+        }
+
+        h1,
+        h2 {
+            margin-top: 0;
+        }
+
+        .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #1f4e79;
+        }
+
+        a {
+            color: #1f4e79;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Results</h1>
+    <div class="card">
+        <h1>Results</h1>
+        <p class="value">Estimated Value: ${{ value }}</p>
+        <p><strong>Estimated Yearly Costs</strong></p>
+        <ul>
+            <li>Fuel: ${{ costs["fuel"] }}</li>
+            <li>Maintenance: ${{ costs["maintenance"] }}</li>
+            <li>Insurance: ${{ costs["insurance"] }}</li>
+            <li>Total: ${{ costs["total"] }}</li>
+        </ul>
+    </div>
 
-    <p>Estimated Value: ${{ value }}</p>
-    <p>Estimated Yearly Costs:</p>
-    <ul>
-        <li>Fuel: ${{ costs["fuel"] }}</li>
-        <li>Maintenance: ${{ costs["maintenance"] }}</li>
-        <li>Insurance: ${{ costs["insurance"] }}</li>
-        <li>Total: ${{ costs["total"] }}</li>
-    </ul>
+    <div class="card">
+        <h2>Recommendation</h2>
+        {% if recommendation %}
+        <p><strong>{{ recommendation["action"] }}</strong></p>
+        <p>{{ recommendation["reasoning"] }}</p>
+        {% else %}
+        <p>No recommendation available right now.</p>
+        {% endif %}
+    </div>
 
-    <p>Recommendation: {{ recommendation }}</p>
+    <div class="card">
+        <h2>Recent Queries</h2>
+        <ul>
+            {% for item in recent_queries %}
+            <li>{{ item.make }} {{ item.model }} — {{ item.vehicle_type }} — Est. ${{ item.estimated_value }} — {{
+                item.created_at }}</li>
+            {% else %}
+            <li>No past queries yet.</li>
+            {% endfor %}
+        </ul>
+        <p><a href="/history">View full history</a></p>
+    </div>
 
-    <a href="/">Go back</a>
+    <p><a href="/">Go back</a></p>
 
 </body>
 

@@ -6,8 +6,8 @@ from flask import Flask, render_template, request
 from genai_helper import generate_narrative
 from utils.depreciation import estimate_value
 from utils.ownership import estimate_costs
-from utils.recommendations import get_recommendation
-from utils.database import create_table, save_valuation
+from utils.recommendations import get_ai_recommendation, get_recommendation
+from utils.database import create_table, get_recent_valuations, save_valuation
 
 app = Flask(__name__)
 create_table()
@@ -25,10 +25,25 @@ def home():
 
         value = estimate_value(price, age, mileage, vehicle_type)
         costs = estimate_costs(12000)
-        recommendation = get_recommendation(age, mileage)
+        ai_recommendation = get_ai_recommendation(age, mileage, price, value)
+        recommendation = get_recommendation(age, mileage, estimated_value=value, price=price)
+        if ai_recommendation:
+            recommendation = {
+                "action": ai_recommendation.split("Action:", 1)[1].split("Reasoning:", 1)[0].strip(),
+                "reasoning": ai_recommendation.split("Reasoning:", 1)[1].strip(),
+            }
         narrative = generate_narrative(make, model, age, mileage, price, value)
 
-        save_valuation(vehicle_type, price, age, mileage, value)
+        save_valuation(
+            make=make,
+            model=model,
+            vehicle_type=vehicle_type,
+            price=price,
+            age=age,
+            mileage=mileage,
+            estimated_value=value,
+        )
+        recent_queries = get_recent_valuations(limit=5)
 
         return render_template(
             "results.html",
@@ -36,9 +51,16 @@ def home():
             costs=costs,
             recommendation=recommendation,
             narrative=narrative,
+            recent_queries=recent_queries,
         )
 
     return render_template("index.html")
+
+
+@app.route("/history")
+def history():
+    queries = get_recent_valuations(limit=20)
+    return render_template("history.html", queries=queries)
 
 
 if __name__ == "__main__":
