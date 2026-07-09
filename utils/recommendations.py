@@ -1,19 +1,30 @@
-def get_recommendation(age, mileage, vehicle_type=None):
+def get_recommendation(age, mileage, estimated_value=None, price=None):
     if age > 10 or mileage > 150000:
         return {
-            "recommendation": "Consider selling soon",
-            "urgency": "high",
-            "reason": "High age or mileage means depreciation will keep accelerating. Value only drops further from here.",
+            "action": "Sell the car at this value.",
+            "reasoning": (
+                "This car is older or has high mileage, so depreciation is likely already cutting into its value. "
+                "Selling now can help you avoid extra repair costs and lock in a reasonable return."
+            ),
         }
-    elif age < 5 and mileage < 60000:
+
+    if age < 5 and mileage < 60000:
         return {
-            "recommendation": "Holding may be a good option",
-            "urgency": "low",
-            "reason": "Low age and mileage mean the car is still retaining value well. No rush to sell.",
+            "action": "Hold on to the car for now.",
+            "reasoning": (
+                "This car is still fairly young and has relatively low mileage. "
+                "If the market stays healthy, waiting a bit longer may let you get more money in the end."
+            ),
         }
-    else:
-        return {
-            "recommendation": "Monitor depreciation trends",
-            "urgency": "medium",
-            "reason": "This car is in a middle range for age and mileage. Keep an eye on the market before deciding.",
-        }
+
+    return {
+        "action": "Watch the market closely.",
+        "reasoning": (
+            "The car is in a middle ground. It may be worth holding for a little while, but a drop in value "
+            "or rising repair costs could make selling sooner the smarter move."
+        ),
+    }
+
+
+def get_ai_recommendation(age, mileage, price, estimated_value):
+    return None

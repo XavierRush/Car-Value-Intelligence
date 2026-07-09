@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Car Value Estimator</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       min-height: 100vh;
@@ -26,26 +31,74 @@
       max-width: 720px;
       min-height: 500px;
       display: flex;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     }
 
     .form-panel {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 55%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 2rem 1.75rem;
+      transition: transform 0.6s cubic-bezier(.77, 0, .18, 1), opacity 0.4s;
+      z-index: 1;
+    }
+
+    .result-panel {
+      position: absolute;
+      top: 0;
+      left: 55%;
+      width: 45%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(40px);
+      transition: transform 0.6s cubic-bezier(.77, 0, .18, 1), opacity 0.4s;
+      z-index: 1;
+    }
+
+    .container.show-result .form-panel {
+      transform: translateX(-60px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .container.show-result .result-panel {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateX(0);
     }
 
     .toggle-panel {
+      position: absolute;
+      right: 0;
+      top: 0;
       width: 45%;
+      height: 100%;
       background: #1a1a2e;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 2rem;
+      z-index: 10;
+      border-radius: 0 16px 16px 0;
+      transition: transform 0.6s cubic-bezier(.77, 0, .18, 1);
+    }
+
+    .container.show-result .toggle-panel {
+      transform: translateX(calc(-100% - 22.2%));
+      border-radius: 16px 0 0 16px;
     }
 
     .toggle-panel svg {
@@ -64,10 +117,27 @@
     }
 
     .toggle-panel p {
-      color: rgba(255,255,255,0.65);
+      color: rgba(255, 255, 255, 0.65);
       font-size: 13px;
       text-align: center;
       line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .toggle-btn {
+      background: transparent;
+      border: 1.5px solid rgba(255, 255, 255, 0.55);
+      color: #fff;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: none;
+    }
+
+    .toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
     }
 
     .form-panel h2 {
@@ -77,8 +147,6 @@
       margin-bottom: 1.25rem;
       align-self: flex-start;
     }
-
-    form { width: 100%; }
 
     .field {
       width: 100%;
@@ -115,8 +183,14 @@
       background: #fff;
     }
 
-    .row { display: flex; gap: 10px; }
-    .row .field { flex: 1; }
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row .field {
+      flex: 1;
+    }
 
     .submit-btn {
       width: 100%;
@@ -132,18 +206,95 @@
       transition: opacity 0.2s;
     }
 
-    .submit-btn:hover { opacity: 0.85; }
+    .submit-btn:hover {
+      opacity: 0.85;
+    }
+
+    .result-panel h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 1.25rem;
+      text-align: center;
+    }
+
+    .result-value {
+      font-size: 38px;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .result-label {
+      font-size: 12px;
+      color: #888;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .breakdown {
+      width: 100%;
+      background: #f7f7f7;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 4px 0;
+      color: #888;
+    }
+
+    .breakdown-row span:last-child {
+      color: #1a1a2e;
+      font-weight: 600;
+    }
+
+    .breakdown-total {
+      border-top: 1px solid #e5e5e5;
+      margin-top: 6px;
+      padding-top: 6px;
+    }
+
+    .breakdown-total span {
+      color: #1a1a2e !important;
+      font-weight: 700 !important;
+      font-size: 13px !important;
+    }
+
+    .back-btn {
+      background: transparent;
+      border: 1px solid #ddd;
+      color: #888;
+      padding: 7px 20px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .back-btn:hover {
+      background: #f0f0f0;
+      color: #1a1a2e;
+    }
   </style>
 </head>
+
 <body>
 
-  <div class="container">
+  <div class="container" id="container">
 
     <!-- Form Panel -->
     <div class="form-panel">
       <h2>Car Value Estimator</h2>
 
-      <form method="POST" action="/">
+      <form action="/" method="post">
         <div class="row">
           <div class="field">
             <label>Make</label>
@@ -183,22 +334,110 @@
 
         <button class="submit-btn" type="submit">Calculate Value</button>
       </form>
+
+      <p style="margin-top: 1rem; font-size: 13px; color: #666;">
+        <a href="/history" style="color: #1a1a2e; text-decoration: none;">View past queries</a>
+      </p>
     </div>
 
-    <div class="toggle-panel">
+    <!-- Result Panel -->
+    <div class="result-panel" id="resultPanel">
+      <h2>Estimated Value</h2>
+      <div class="result-value" id="resultVal">—</div>
+      <div class="result-label" id="resultCar"></div>
+      <div class="breakdown" id="breakdown"></div>
+      <button class="back-btn" id="backBtn">← Recalculate</button>
+    </div>
+
+    <div class="toggle-panel" id="togglePanel">
       <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="56" height="56" rx="16" fill="rgba(255,255,255,0.08)"/>
-        <path d="M10 30l4-10h28l4 10" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-        <rect x="8" y="30" width="40" height="10" rx="3" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
-        <circle cx="17" cy="42" r="3.5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
-        <circle cx="39" cy="42" r="3.5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
-        <path d="M15 28l2.5-6h21l2.5 6H15z" fill="rgba(255,255,255,0.12)"/>
+        <rect width="56" height="56" rx="16" fill="rgba(255,255,255,0.08)" />
+        <path d="M10 30l4-10h28l4 10" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" />
+        <rect x="8" y="30" width="40" height="10" rx="3" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)"
+          stroke-width="1.2" />
+        <circle cx="17" cy="42" r="3.5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)"
+          stroke-width="1.2" />
+        <circle cx="39" cy="42" r="3.5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)"
+          stroke-width="1.2" />
+        <path d="M15 28l2.5-6h21l2.5 6H15z" fill="rgba(255,255,255,0.12)" />
       </svg>
-      <h2>Know Your Car's Worth</h2>
-      <p>Fill in your vehicle details and we'll estimate its current market value, plus a plain-English breakdown.</p>
+      <h2 id="toggleTitle">Know Your Car's Worth</h2>
+      <p id="toggleDesc">Fill in your vehicle details and we'll estimate its current market value instantly.</p>
+      <button class="toggle-btn" id="toggleBtn">← Recalculate</button>
     </div>
 
   </div>
 
+  <script>
+    const container = document.getElementById('container');
+    const calcBtn = document.getElementById('calcBtn');
+    const backBtn = document.getElementById('backBtn');
+    const toggleBtn = document.getElementById('toggleBtn');
+
+    function depreciationRate(type) {
+      return { sedan: 0.15, suv: 0.14, truck: 0.13, luxury: 0.18 }[type] || 0.15;
+    }
+
+    function mileageFactor(mileage) {
+      if (mileage < 30000) return 1.02;
+      if (mileage < 60000) return 1.00;
+      if (mileage < 100000) return 0.93;
+      if (mileage < 150000) return 0.84;
+      return 0.72;
+    }
+
+    function calculate() {
+      const price = parseFloat(document.getElementById('price').value);
+      const age = parseInt(document.getElementById('age').value);
+      const mileage = parseInt(document.getElementById('mileage').value);
+      const type = document.getElementById('vehicle_type').value;
+      const make = document.getElementById('make').value.trim();
+      const model = document.getElementById('model').value.trim();
+
+      if (!price || isNaN(age) || isNaN(mileage)) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      const rate = depreciationRate(type);
+      const ageFactor = Math.pow(1 - rate, age);
+      const mFactor = mileageFactor(mileage);
+      const estimated = Math.round(price * ageFactor * mFactor);
+
+      const retainPct = Math.round((estimated / price) * 100);
+      const ageLoss = Math.round(price * (1 - ageFactor));
+      const mileLoss = Math.round(price * ageFactor * (1 - mFactor));
+
+      document.getElementById('resultVal').textContent = '$' + estimated.toLocaleString();
+      document.getElementById('resultCar').textContent = [make, model].filter(Boolean).join(' ')
+        || (type.charAt(0).toUpperCase() + type.slice(1));
+
+      document.getElementById('breakdown').innerHTML = `
+        <div class="breakdown-row"><span>Original price</span><span>$${price.toLocaleString()}</span></div>
+        <div class="breakdown-row"><span>Age depreciation (${age} yr)</span><span>-$${ageLoss.toLocaleString()}</span></div>
+        <div class="breakdown-row"><span>Mileage adjustment</span><span>-$${mileLoss.toLocaleString()}</span></div>
+        <div class="breakdown-row breakdown-total"><span>Value retained</span><span>${retainPct}%</span></div>
+      `;
+
+      document.getElementById('toggleTitle').textContent = 'Great estimate!';
+      document.getElementById('toggleDesc').textContent = "Your vehicle's current market value has been calculated based on depreciation and mileage.";
+      document.getElementById('toggleBtn').style.display = 'block';
+
+      container.classList.add('show-result');
+    }
+
+    function goBack() {
+      container.classList.remove('show-result');
+      document.getElementById('toggleTitle').textContent = "Know Your Car's Worth";
+      document.getElementById('toggleDesc').textContent = "Fill in your vehicle details and we'll estimate its current market value instantly.";
+      document.getElementById('toggleBtn').style.display = 'none';
+    }
+
+    calcBtn.addEventListener('click', calculate);
+    backBtn.addEventListener('click', goBack);
+    toggleBtn.addEventListener('click', goBack);
+  </script>
+
 </body>
+
 </html>
