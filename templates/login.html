@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Sign In — CarValue{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="auth">
+    <div class="container auth-grid">
+        <div class="auth-copy">
+            <span class="eyebrow">Secure access</span>
+            <h1>Sign in to see your valuations.</h1>
+            <p>Login is required for the calculator, results, and valuation history, so your estimates are saved to your own account.</p>
+        </div>
+
+        <div class="auth-card surface">
+            <h2>Welcome back</h2>
+            <p class="auth-sub">Sign in with your email to continue.</p>
+
+            <form method="post" action="{{ url_for('login') }}" class="auth-form">
+                <input type="hidden" name="next" value="{{ next_url }}">
+
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="you@example.com" required>
+
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="••••••••" required>
+
+                <button type="submit" class="btn btn-accent btn-block">Sign In</button>
+            </form>
+
+            <p class="form-foot">New here? <a href="{{ url_for('signup') }}">Create an account →</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

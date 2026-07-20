@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Value My Car — CarValue{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/evaluate.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="evaluate">
+    <div class="container evaluate-grid">
+
+        <div class="form-card surface">
+            <span class="eyebrow">Step 1 of 1</span>
+            <h1>Tell us about your car</h1>
+            <p class="sub">Pick from the dropdowns where you can — it keeps the estimate accurate and avoids typos.</p>
+
+            <form class="evaluate-form" action="/calculate" method="post">
+                <div class="form-row">
+                    <div class="field">
+                        <label for="make">Make</label>
+                        <select id="make" name="make" required>
+                            <option value="" disabled {% if not result %}selected{% endif %}>Select a make</option>
+                            {% for make in makes %}
+                            <option value="{{ make }}" {% if result and result.make == make %}selected{% endif %}>{{ make }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="model">Model</label>
+                        <select id="model" name="model" required>
+                            <option value="" disabled selected>Select a make first</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="price">Original price ($)</label>
+                    <input type="number" id="price" name="price" placeholder="e.g. 30000" required min="0"
+                        value="{{ result.price if result else '' }}">
+                </div>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label for="age">Age (years)</label>
+                        <input type="number" id="age" name="age" placeholder="e.g. 5" required min="0" max="40"
+                            value="{{ result.age if result else '' }}">
+                    </div>
+                    <div class="field">
+                        <label for="mileage">Mileage</label>
+                        <input type="number" id="mileage" name="mileage" placeholder="e.g. 60000" required min="0"
+                            value="{{ result.mileage if result else '' }}">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="vehicle_type">Vehicle type <span class="hint">— affects depreciation curve</span></label>
+                    <select id="vehicle_type" name="vehicle_type">
+                        <option value="sedan" {% if result and result.vehicle_type=='sedan' %}selected{% endif %}>Sedan</option>
+                        <option value="suv" {% if result and result.vehicle_type=='suv' %}selected{% endif %}>SUV</option>
+                        <option value="truck" {% if result and result.vehicle_type=='truck' %}selected{% endif %}>Truck</option>
+                        <option value="luxury" {% if result and result.vehicle_type=='luxury' %}selected{% endif %}>Luxury</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="condition">Condition</label>
+                    <select id="condition" name="condition">
+                        <option value="excellent">Excellent — no visible wear</option>
+                        <option value="good" selected>Good — normal wear for its age</option>
+                        <option value="fair">Fair — some cosmetic or mechanical issues</option>
+                        <option value="poor">Poor — significant issues</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-accent btn-block" type="submit">Calculate my value</button>
+            </form>
+
+            <p class="form-foot">Prefer to browse first? <a href="/history">See past valuations →</a></p>
+        </div>
+
+        <div class="side-panel">
+            <h2>What you'll get</h2>
+            <p>One estimate isn't enough to negotiate with. Your result page breaks it down three ways, sourced from multiple pricing signals.</p>
+            <div class="side-list">
+                <div class="side-item">
+                    <i class="bx bx-git-compare"></i>
+                    <div>
+                        <h4>Trade-in, private-party &amp; dealer values</h4>
+                        <p>Know your number for every way you might sell.</p>
+                    </div>
+                </div>
+                <div class="side-item">
+                    <i class="bx bx-line-chart"></i>
+                    <div>
+                        <h4>Current market trends</h4>
+                        <p>See how similar vehicles are pricing right now.</p>
+                    </div>
+                </div>
+                <div class="side-item">
+                    <i class="bx bx-bulb"></i>
+                    <div>
+                        <h4>A plain-English recommendation</h4>
+                        <p>Sell now, wait, or hold — with the reasoning behind it.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block page_js %}
+<script>
+    // Small dependent dropdown so "Model" only ever shows models that exist
+    // for the selected make — another guardrail against free-text mistakes.
+    const MODELS_BY_MAKE = {
+        "Toyota": ["Camry", "Corolla", "RAV4", "Highlander", "Tacoma"],
+        "Honda": ["Civic", "Accord", "CR-V", "Pilot", "Odyssey"],
+        "Ford": ["F-150", "Escape", "Explorer", "Mustang", "Focus"],
+        "Chevrolet": ["Silverado", "Equinox", "Malibu", "Tahoe", "Camaro"],
+        "BMW": ["3 Series", "5 Series", "X3", "X5", "M4"],
+        "Mercedes-Benz": ["C-Class", "E-Class", "GLC", "GLE", "S-Class"],
+        "Tesla": ["Model 3", "Model Y", "Model S", "Model X"],
+        "Mazda": ["Mazda3", "CX-5", "CX-30", "Mazda6"],
+        "Subaru": ["Outback", "Forester", "Crosstrek", "Impreza"],
+        "Jeep": ["Wrangler", "Grand Cherokee", "Cherokee", "Compass"]
+    };
+
+    const makeSelect = document.getElementById("make");
+    const modelSelect = document.getElementById("model");
+    const selectedMake = "{{ result.make if result else '' }}";
+    const selectedModel = "{{ result.model if result else '' }}";
+
+    function populateModels(make, preselect) {
+        const models = MODELS_BY_MAKE[make] || [];
+        modelSelect.innerHTML = "";
+        if (!models.length) {
+            modelSelect.innerHTML = '<option value="" disabled selected>Select a make first</option>';
+            return;
+        }
+        modelSelect.innerHTML = models
+            .map((m) => `<option value="${m}" ${m === preselect ? "selected" : ""}>${m}</option>`)
+            .join("");
+    }
+
+    makeSelect.addEventListener("change", () => populateModels(makeSelect.value, ""));
+
+    if (selectedMake) {
+        populateModels(selectedMake, selectedModel);
+    }
+</script>
+{% endblock %}

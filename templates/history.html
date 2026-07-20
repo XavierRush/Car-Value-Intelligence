@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Past Valuations — CarValue{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="history">
+    <div class="container">
+        <div class="heading">
+            <span class="eyebrow">Your Activity</span>
+            <h1>Past valuations</h1>
+        </div>
+
+        {% if queries %}
+        <div class="history-list">
+            {% for item in queries %}
+            <div class="history-card surface">
+                <div class="left">
+                    <h3>{{ item.make }} {{ item.model }}</h3>
+                    <div class="meta">{{ item.vehicle_type|capitalize }} · {{ item.age }} yr · {{ item.mileage }} mi</div>
+                </div>
+                <div class="right">
+                    <div class="val">${{ item.estimated_value }}</div>
+                    <div class="date">{{ item.created_at }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="history-empty surface">
+            <i class="bx bx-search-alt"></i>
+            <p>No valuations yet. Run your first estimate to see it here.</p>
+            <br>
+            <a href="/evaluate" class="btn btn-accent">Value My Car →</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

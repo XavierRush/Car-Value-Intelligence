@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Value Intelligence</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='refrence.css') }}">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!--Header-->
+    <header class="header">
+        <div class="nav container">
+            <div class="menu-icon">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+
+            <a href="#" class="logo">Car<span>Value</span></a>
+
+            <div class="nav-links">
+                <a href="#other-car" class="nav-link">Value another car</a>
+                <a href="#price Breakdown" class="nav-link">Price Breakdown</a>
+                <a href="#faq" class="nav-link">Market Trends</a>
+                <a href="/evaluate" class="nav-link">Next Steps</a>
+            </div>
+
+            <div class="right-nav">
+                <i class="bx bx-search search-icon"></i>
+
+                <div class="search-box container">
+                    <input type="search" name="" id="" placeholder="search here">
+                </div>
+
+                <div class="login-btn">
+                    <span>Login</span>
+                </div>
+
+                <div class="sign-up-btn">
+                    <span>Sign Up</span>
+                </div>
+
+            </div>
+
+        </div>
+    </header>
+    <!--What other website dont see-->
+    <section class="other-car" id="home">
+        <div class="otehr-container" container>
+            <!--Anothet CTA-->
+            <div class="other-cta">
+                <h2>Want to evalute another Car <span>price another car.</span></h2>
+                <p>Enter your vehicle details and get an instant breakdown of your car's real market value — and exactly
+                    why it's worth what it's worth.</p>
+                <a href="/evaluate" class="home-cta-btn">Value My Car →</a>
+            </div>
+            <!--Home image-->
+            <img src="{{ url_for('static', filename='images/home-img.png') }}" alt="" class="home-img">
+            <spline-viewer class="'car"
+                url="https://prod.spline.design/jDIDvWuUrR1SuuaW/scene.splinecode"></spline-viewer>
+
+        </div>
+    </section>
+
+    <!--Price Breakdown-->
+    <section class="price-breakdown" id="price-breakdown">
+        <!--Heading-->
+        <div class="heading">
+            <span>Price Breakdown</span>
+            <h2>
+                Understand Your car's True Value<br>
+
+            </h2>
+        </div>
+    </section>
+
+    <section class="Market-Trend" id="Market-Trend">
+        <!--Heading-->
+        <div class="heading">
+            <Span>The Market Breakdown</Span>
+            <h2>Understand The Market</h2>
+        </div>
+        <!--Market Container-->
+        <div class="" id="Market-container" container>
+            <div class="market-box"></div>
+        </div>
+    </section>
+
+    <!--Nedxt Stepts-->
+    <section class="next-steps" id="next-step">
+
+        <!--Heading-->
+        <div class="heading">
+            <span>Next Steps</span>
+            <h2> So Now What</h2>
+        </div>
+        <div class="steps-container" container>
+            <!--Container Item 1-->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <h2 class="accordion-title">How is my car's value calculated?</h2>
+                    <i class="bx bx-plus accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <p class="accordion-answer">
+                        We analyze your vehicle's make, model, year, mileage, condition, and current market trends to
+                        estimate its value.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    </div>
+    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container container">
+
+            <!-- Brand -->
+            <div class="footer-brand">
+                <a href="#" class="logo">Car<span>Value</span></a>
+                <p>Know what your car is worth — and why. Built for sellers who want real answers, not just numbers.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="bx bxl-facebook"></i></a>
+                    <a href="#"><i class="bx bxl-twitter"></i></a>
+                    <a href="#"><i class="bx bxl-instagram"></i></a>
+                    <a href="#"><i class="bx bxl-linkedin"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="#home">Home</a>
+                <a href="#selling">Sell Smarter</a>
+                <a href="#team-data">Our Team</a>
+                <a href="#faq">FAQ</a>
+                <a href="/evaluate">Value My Car</a>
+            </div>
+
+            <!-- Resources -->
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <a href="/history">Past Valuations</a>
+                <a href="#faq">How It Works</a>
+                <a href="#selling">Why Sell With Us</a>
+            </div>
+
+            <!-- Contact -->
+            <div class="footer-contact">
+                <h4>Contact</h4>
+                <p><i class="bx bx-envelope"></i> hello@carvalue.com</p>
+                <p><i class="bx bx-phone"></i> (555) 123-4567</p>
+                <p><i class="bx bx-map"></i> New York, NY</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 CarValue. All rights reserved.</p>
+        </div>
+
+    </footer>
+
+
+
+
+
+</body>
+
+
+</html>

@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+*{
+    font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+:root{
+    --main-color: #e53f28;
+    --text-color: #071344;
+    --bg-color: #fff;
+    --hover-color: hsl(7, 78%, 48%);
+    --container-color: #6c7283;
+}
+
+/* customer scroll bar */
+html::-webkit-scrollbar{
+    width: 0.5rem;
+    background: transparent;
+}
+html::-webkit-scrollbar-thumb{
+    background-color: var(--main-color);
+}
+
+body{
+    color: var(--text-color);
+}
+
+a{
+    text-decoration: none;
+}
+
+section{
+    padding: 5rem 0 3rem;
+}
+
+li{
+    list-style: none;
+}

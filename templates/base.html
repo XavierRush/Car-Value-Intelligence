@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CarValue{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    {% block page_css %}{% endblock %}
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-stack container">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category|default('success') }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <header class="site-header">
+        <div class="nav">
+            <div class="menu-icon">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+
+            <a href="/" class="logo">Car<span>Value</span></a>
+
+            <div class="nav-links">
+                <a href="/#selling" class="nav-link">How It Works</a>
+                <a href="/#team-data" class="nav-link">Our Team</a>
+                <a href="/#faq" class="nav-link">FAQ</a>
+                <a href="/history" class="nav-link {% if active_page|default('') == 'history' %}is-active{% endif %}">Past Valuations</a>
+                <a href="/evaluate" class="nav-link btn btn-accent {% if active_page|default('') == 'evaluate' %}is-active{% endif %}">Get My Value</a>
+            </div>
+
+            <div class="right-nav">
+                <i class="bx bx-search search-icon"></i>
+                <div class="search-box">
+                    <input type="search" placeholder="Search make, model, or a past query…">
+                </div>
+                {% if session.get('user') %}
+                <a href="{{ url_for('logout') }}" class="btn btn-ghost">Logout</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-ghost">Login</a>
+                <a href="{{ url_for('signup') }}" class="btn btn-accent">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="site-footer">
+        <div class="footer-container container">
+            <div class="footer-brand">
+                <a href="/" class="logo">Car<span>Value</span></a>
+                <p>Know what your car is worth — and why. Built for sellers who want real answers, not just numbers.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="bx bxl-facebook"></i></a>
+                    <a href="#"><i class="bx bxl-twitter"></i></a>
+                    <a href="#"><i class="bx bxl-instagram"></i></a>
+                    <a href="#"><i class="bx bxl-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="/#selling">Sell Smarter</a>
+                <a href="/#team-data">Our Team</a>
+                <a href="/#faq">FAQ</a>
+                <a href="/evaluate">Value My Car</a>
+            </div>
+
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <a href="/history">Past Valuations</a>
+                <a href="/#faq">How It Works</a>
+                <a href="/#selling">Why Sell With Us</a>
+            </div>
+
+            <div class="footer-contact">
+                <h4>Contact</h4>
+                <p><i class="bx bx-envelope"></i> hello@carvalue.com</p>
+                <p><i class="bx bx-phone"></i> (555) 123-4567</p>
+                <p><i class="bx bx-map"></i> New York, NY</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 CarValue. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block page_js %}{% endblock %}
+</body>
+</html>

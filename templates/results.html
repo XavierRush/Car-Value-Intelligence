@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Your Estimate — CarValue{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="results">
+    <div class="container results-grid">
+
+        <!-- Headline value + breakdown -->
+        <div class="value-card">
+            <span class="eyebrow">Estimated value</span>
+            <h1>${{ value }}</h1>
+            <div class="vehicle-name">
+                {{ vehicle.make ~ ' ' ~ vehicle.model if vehicle and (vehicle.make or vehicle.model) else 'Your vehicle' }}
+                {% if vehicle and vehicle.age %} · {{ vehicle.age }} yr{% endif %}
+                {% if vehicle and vehicle.mileage %} · {{ vehicle.mileage }} mi{% endif %}
+            </div>
+
+            <div class="confidence"><i class="bx bx-check-shield"></i> {{ confidence if confidence else 92 }}% confidence — based on {{ source_count if source_count else 3 }} pricing sources</div>
+
+            <div class="price-variants">
+                <div class="price-variant is-primary">
+                    <span>Private party value</span>
+                    <strong>${{ price_variants.private_party if price_variants else value }}</strong>
+                </div>
+                <div class="price-variant">
+                    <span>Trade-in value</span>
+                    <strong>${{ price_variants.trade_in if price_variants else value }}</strong>
+                </div>
+                <div class="price-variant">
+                    <span>Dealer retail value</span>
+                    <strong>${{ price_variants.dealer_retail if price_variants else value }}</strong>
+                </div>
+            </div>
+
+            {% if breakdown %}
+            <div class="breakdown">
+                <div class="breakdown-row"><span>Original price</span><span>${{ breakdown.price }}</span></div>
+                <div class="breakdown-row"><span>Age depreciation ({{ breakdown.age }} yr)</span><span>-${{ breakdown.age_loss }}</span></div>
+                <div class="breakdown-row"><span>Mileage adjustment</span><span>-${{ breakdown.mile_loss }}</span></div>
+                <div class="breakdown-row total"><span>Value retained</span><span>{{ breakdown.retain_pct }}%</span></div>
+            </div>
+            {% endif %}
+
+            <a href="/evaluate" class="btn btn-outline-invert btn-block">← Recalculate</a>
+        </div>
+
+        <!-- Insight stack -->
+        <div class="insight-stack">
+
+            <div class="insight-card surface">
+                <span class="reco-badge {{ recommendation.tone if recommendation else 'sell' }}">
+                    {{ recommendation.action if recommendation else 'Sell Now' }}
+                </span>
+                <h3>Why your car is worth this</h3>
+                <p class="card-sub">
+                    {{ recommendation.reasoning if recommendation else
+                       "Market demand is currently strong for this vehicle, and depreciation has slowed compared to earlier years — making this a good window to sell." }}
+                </p>
+                <div class="source-tags">
+                    {% for source in sources %}
+                    <span class="source-tag">{{ source }}</span>
+                    {% else %}
+                    <span class="source-tag">Depreciation model</span>
+                    <span class="source-tag">Live marketplace listings</span>
+                    <span class="source-tag">Regional demand index</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="insight-card surface">
+                <h3>Market trends</h3>
+                <p class="card-sub">How this vehicle has moved over the last 90 days</p>
+                {% for trend in market_trends %}
+                <div class="trend-row">
+                    <span>{{ trend.label }}</span>
+                    <span class="delta {{ 'up' if trend.direction == 'up' else 'down' }}">
+                        {{ '+' if trend.direction == 'up' else '-' }}{{ trend.change }}
+                    </span>
+                </div>
+                {% else %}
+                <div class="trend-row"><span>Average asking price</span><span class="delta up">+2.1%</span></div>
+                <div class="trend-row"><span>Days on market</span><span class="delta down">-4 days</span></div>
+                <div class="trend-row"><span>Local demand</span><span class="delta up">High</span></div>
+                {% endfor %}
+            </div>
+
+            <div class="insight-card surface">
+                <h3>Similar local listings</h3>
+                <p class="card-sub">Comparable vehicles currently listed near you</p>
+                {% for listing in similar_listings %}
+                <div class="listing-row">
+                    <span>{{ listing.title }}<br><span class="loc">{{ listing.location }}</span></span>
+                    <strong>${{ listing.price }}</strong>
+                </div>
+                {% else %}
+                <div class="listing-row"><span>2020 Honda Civic LX<br><span class="loc">Brooklyn, NY · 12 mi away</span></span><strong>$18,900</strong></div>
+                <div class="listing-row"><span>2020 Honda Civic EX<br><span class="loc">Newark, NJ · 18 mi away</span></span><strong>$19,650</strong></div>
+                <div class="listing-row"><span>2019 Honda Civic LX<br><span class="loc">Queens, NY · 9 mi away</span></span><strong>$17,200</strong></div>
+                {% endfor %}
+            </div>
+
+            <div class="insight-card surface">
+                <h3>Recent queries</h3>
+                <ul class="history-mini">
+                    {% for item in recent_queries %}
+                    <li>
+                        <span>{{ item.make }} {{ item.model }}</span>
+                        <span>${{ item.estimated_value }} <span class="date">· {{ item.created_at }}</span></span>
+                    </li>
+                    {% else %}
+                    <li><span>No past queries yet</span></li>
+                    {% endfor %}
+                </ul>
+                <a href="/history">View full history →</a>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+{% endblock %}

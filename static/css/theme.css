@@ -1,0 +1,230 @@
+/* ============================================================
+   CarValue — shared design system
+   Loaded on every page. Page-specific CSS should only ever
+   add layout for that page's unique sections, never redefine
+   colors, type, buttons, or the header/footer.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+    /* Brand palette — named, not incidental */
+    --ink:        #071344;   /* primary text / brand navy */
+    --ink-soft:   #4b5479;   /* secondary text on light bg */
+    --ember:      #e5533e;   /* accent — "the number that matters" */
+    --ember-deep: #c23f2c;   /* hover / pressed state of ember */
+    --paper:      #ffffff;
+    --cloud:      #f6f5f3;   /* soft section background */
+    --mist:       #eceaf5;   /* card fill on paper */
+    --line:       #e3e1e8;   /* hairline borders */
+    --success:    #1f8a5f;
+
+    --font-display: 'Outfit', system-ui, sans-serif;
+    --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 24px;
+
+    --shadow-card: 0 10px 30px rgba(7, 19, 68, 0.08);
+    --shadow-pop:  0 16px 40px rgba(7, 19, 68, 0.14);
+
+    --container: 1120px;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; scroll-behavior:smooth; }
+
+html::-webkit-scrollbar{ width:.5rem; background:transparent; }
+html::-webkit-scrollbar-thumb{ background-color:var(--ember); border-radius: 999px; }
+
+body{
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,h4{ font-family: var(--font-display); font-weight:700; line-height:1.15; letter-spacing:-0.01em; }
+
+a{ text-decoration:none; color:inherit; }
+li{ list-style:none; }
+img{ max-width:100%; display:block; }
+
+.container{ max-width: var(--container); margin:0 auto; width:100%; padding: 0 1.5rem; }
+
+.eyebrow{
+    display:inline-block;
+    font-size: 0.75rem;
+    font-weight:600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ember);
+}
+
+/* ---------- Buttons (one system, every page) ---------- */
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.4rem;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight:600;
+    letter-spacing:0.01em;
+    padding: 12px 28px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor:pointer;
+    transition: transform .15s ease, opacity .15s ease, background .2s ease;
+}
+.btn:active{ transform: translateY(1px); }
+
+.btn-primary{ background: var(--ink); color:#fff; }
+.btn-primary:hover{ opacity:.88; }
+
+.btn-accent{ background: var(--ember); color:#fff; }
+.btn-accent:hover{ background: var(--ember-deep); }
+
+.btn-ghost{ background: transparent; color: var(--ink); border-color: var(--line); }
+.btn-ghost:hover{ background: var(--cloud); }
+
+.btn-outline-invert{ background:transparent; color:#fff; border-color: rgba(255,255,255,.55); }
+.btn-outline-invert:hover{ background: rgba(255,255,255,.12); }
+
+.btn-block{ width:100%; }
+
+/* ---------- Header (identical on every page) ---------- */
+.site-header{
+    position: fixed;
+    top:0; left:0; width:100%;
+    z-index:100;
+    background: transparent;
+    transition: background .2s ease, box-shadow .2s ease;
+}
+.site-header.shadow{
+    background: var(--paper);
+    box-shadow: 0 1px 0 var(--line);
+}
+.nav{
+    max-width: 1240px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 18px 1.5rem;
+}
+.logo{ font-family: var(--font-display); font-size:1.25rem; font-weight:700; color:var(--ink); }
+.logo span{ color: var(--ember); }
+
+.menu-icon{ display:none; flex-direction:column; row-gap:5px; cursor:pointer; z-index:200; }
+.menu-icon div{ height:2px; width:24px; background:var(--ink); transition:.3s; }
+.menu-icon.move .line1{ transform: rotate(-45deg) translate(-5px,5px); }
+.menu-icon.move .line2{ opacity:0; }
+.menu-icon.move .line3{ transform: rotate(45deg) translate(-5px,-5px); }
+
+.nav-links{ display:flex; align-items:center; column-gap:1.75rem; }
+.nav-link{ font-size:0.9rem; font-weight:500; color:var(--ink-soft); }
+.nav-link:hover{ color:var(--ember); }
+.nav-link.is-active{ color:var(--ink); font-weight:600; }
+
+.right-nav{ display:flex; align-items:center; column-gap:0.75rem; position:relative; }
+.search-icon{ font-size:1.3rem; cursor:pointer; color:var(--ink-soft); }
+.search-box{
+    position:absolute; top:140%; right:0; width:280px;
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius-sm);
+    box-shadow: var(--shadow-pop);
+    clip-path: circle(0% at 100% 0%);
+    pointer-events:none;
+}
+.search-box.active{ clip-path: circle(150% at 100% 0%); transition:.35s; pointer-events:auto; }
+.search-box input{ width:100%; padding:14px 16px; border:none; outline:none; font-family:var(--font-body); font-size:0.9rem; }
+
+/* ---------- Account menu (logged-in state) ---------- */
+.user-menu{ position:relative; }
+.user-menu-trigger{
+    display:flex; align-items:center; gap:.5rem;
+    background:transparent; border:1px solid var(--line); border-radius:999px;
+    padding: 5px 12px 5px 5px; cursor:pointer; font-family: var(--font-body);
+}
+.user-menu-trigger:hover{ background: var(--cloud); }
+.user-avatar{
+    width:26px; height:26px; border-radius:50%; background: var(--ember); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700;
+}
+.user-name{ font-size:0.85rem; font-weight:500; color:var(--ink); max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.user-menu-trigger .bx-chevron-down{ font-size:1rem; color: var(--ink-soft); }
+
+.user-menu-dropdown{
+    position:absolute; top: 130%; right:0; min-width:180px;
+    background:var(--paper); border:1px solid var(--line); border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-pop); padding:.5rem;
+    opacity:0; pointer-events:none; transform: translateY(-6px);
+    transition: opacity .15s ease, transform .15s ease;
+}
+.user-menu:hover .user-menu-dropdown,
+.user-menu:focus-within .user-menu-dropdown{
+    opacity:1; pointer-events:auto; transform: translateY(0);
+}
+.user-menu-dropdown a{
+    display:flex; align-items:center; gap:.6rem; font-size:0.85rem; color:var(--ink);
+    padding: 9px 10px; border-radius: 6px;
+}
+.user-menu-dropdown a:hover{ background: var(--cloud); }
+.user-menu-dropdown .bx{ color: var(--ink-soft); font-size:1rem; }
+
+@media (max-width:980px){
+    .menu-icon{ display:flex; }
+    .right-nav .search-icon,
+    .right-nav .search-box{ display:none; }
+    .nav-links{
+        position:fixed; top:0; left:0; width:280px; height:100vh;
+        background:var(--paper); flex-direction:column; align-items:flex-start;
+        padding: 6rem 2rem 2rem; row-gap:1.1rem;
+        transform: translate3d(-100%,0,0);
+        transition:.4s cubic-bezier(.075,.82,.165,1);
+        box-shadow: var(--shadow-pop);
+        z-index:150;
+    }
+    .nav-links.menu-open{ transform:translate3d(0,0,0); }
+}
+
+/* ---------- Footer (identical on every page) ---------- */
+.site-footer{ background:var(--ink); color:rgba(255,255,255,.7); padding: 4rem 0 0; margin-top: 4rem; }
+.footer-container{ display:grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap:3rem; padding-bottom:3rem; }
+.footer-brand .logo{ color:#fff; margin-bottom:1rem; display:inline-block; }
+.footer-brand .logo span{ color: var(--ember); }
+.footer-brand p{ font-size:13px; line-height:1.8; max-width:260px; margin-bottom:1.25rem; }
+.footer-social{ display:flex; gap:.6rem; }
+.footer-social a{
+    width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,.2);
+    display:flex; align-items:center; justify-content:center; font-size:0.95rem;
+    transition: background .2s, color .2s;
+}
+.footer-social a:hover{ background:#fff; color:var(--ink); }
+.footer-links h4, .footer-contact h4{ color:#fff; font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; margin-bottom:1.1rem; }
+.footer-links{ display:flex; flex-direction:column; gap:.55rem; }
+.footer-links a{ font-size:13px; color:rgba(255,255,255,.65); }
+.footer-links a:hover{ color:#fff; }
+.footer-contact{ display:flex; flex-direction:column; gap:.65rem; font-size:13px; }
+.footer-contact p{ display:flex; align-items:center; gap:.5rem; }
+.footer-contact i{ color:rgba(255,255,255,.4); }
+.footer-bottom{ border-top:1px solid rgba(255,255,255,.1); text-align:center; padding:1.1rem; font-size:12px; color:rgba(255,255,255,.4); }
+
+@media (max-width:700px){
+    .footer-container{ grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------- Shared "card" surface used by form + results ---------- */
+.surface{
+    background:var(--paper);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+}
+
+/* ---------- Shared section heading ---------- */
+.heading{ text-align:center; margin-bottom:2.5rem; }
+.heading .eyebrow{ display:block; margin-bottom:.5rem; }
+.heading h2{ font-size:1.7rem; }
+
+/* ---------- Utility ---------- */
+.page-spacer{ height: 88px; } /* offsets the fixed header on inner pages */
