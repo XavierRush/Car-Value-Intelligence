@@ -94,7 +94,11 @@ def get_recent_valuations(limit=5):
     finally:
         conn.close()
 <<<<<<< HEAD
+<<<<<<< HEAD
     return [dict(row) for row in rows]
+=======
+    return [dict(row) for row in rows]
+>>>>>>> 6b61039cf293e630bba18734b0d0032baf1eab01
 =======
     return [dict(row) for row in rows]
 >>>>>>> 6b61039cf293e630bba18734b0d0032baf1eab01

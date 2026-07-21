@@ -30,7 +30,11 @@ python app.py
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Then open your browser and go to the local address shown in the terminal.
+=======
+Then open your browser and go to the local address shown in the terminal.
+>>>>>>> 6b61039cf293e630bba18734b0d0032baf1eab01
 =======
 Then open your browser and go to the local address shown in the terminal.
 >>>>>>> 6b61039cf293e630bba18734b0d0032baf1eab01

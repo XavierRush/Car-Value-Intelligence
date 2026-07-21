@@ -13,7 +13,11 @@ class RecommendationTests(unittest.TestCase):
 
 if __name__ == "__main__":
 <<<<<<< HEAD
+<<<<<<< HEAD
     unittest.main()
+=======
+    unittest.main()
+>>>>>>> 6b61039cf293e630bba18734b0d0032baf1eab01
 =======
     unittest.main()
 >>>>>>> 6b61039cf293e630bba18734b0d0032baf1eab01
