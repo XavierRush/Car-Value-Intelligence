@@ -16,4 +16,8 @@ def estimate_value(price, age, mileage, vehicle_type):
 
     if value < 0:
         value = 0
+<<<<<<< HEAD
     return round(value, 2)
+=======
+    return round(value, 2)
+>>>>>>> 6b61039cf293e630bba18734b0d0032baf1eab01

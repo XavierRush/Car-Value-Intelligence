@@ -48,49 +48,6 @@
     font-size: 1.7rem;
 }
 
-.auth-sub{
-    margin-top: .35rem;
-    margin-bottom: 1.25rem;
-    color: var(--ink-soft);
-}
-
-.auth-form{
-    display:flex;
-    flex-direction:column;
-    gap: .7rem;
-}
-
-.auth-form label{
-    margin-top: .45rem;
-    font-size: .85rem;
-    font-weight:600;
-    color: var(--ink);
-}
-
-.auth-form input{
-    width:100%;
-    padding: 13px 14px;
-    border-radius: var(--radius-sm);
-    border:1px solid var(--line);
-    background: var(--paper);
-    color: var(--ink);
-    font: inherit;
-    outline:none;
-}
-
-.auth-form input:focus{
-    border-color: rgba(229,83,62,.55);
-    box-shadow: 0 0 0 4px rgba(229,83,62,.08);
-}
-
-.form-foot{
-    margin-top: 1.25rem;
-    font-size: 0.92rem;
-    color: var(--ink-soft);
-}
-
-.form-foot a{ color: var(--ember); font-weight:600; }
-
 @media (max-width: 900px){
     .auth-grid{ grid-template-columns:1fr; }
     .auth-copy h1{ max-width:none; }

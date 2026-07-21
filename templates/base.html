@@ -48,14 +48,64 @@
                 {% if session.get('user') %}
                 <a href="{{ url_for('logout') }}" class="btn btn-ghost">Logout</a>
                 {% else %}
-                <a href="{{ url_for('login') }}" class="btn btn-ghost">Login</a>
-                <a href="{{ url_for('signup') }}" class="btn btn-accent">Sign Up</a>
+                <a href="{{ url_for('login') }}" class="btn btn-ghost js-open-auth" data-panel="login">Login</a>
+                <a href="{{ url_for('signup') }}" class="btn btn-accent js-open-auth" data-panel="signup">Sign Up</a>
                 {% endif %}
             </div>
         </div>
     </header>
 
     {% block content %}{% endblock %}
+
+    {% if not session.get('user') %}
+    <div class="modal-overlay" id="authOverlay">
+        <div class="modal-box">
+            <button type="button" class="modal-close" id="authModalClose" aria-label="Close">&times;</button>
+
+            <div class="modal-panel" id="loginPanel">
+                <h2>Welcome back</h2>
+                <p class="auth-sub">Sign in with your email to continue.</p>
+
+                <form method="post" action="{{ url_for('login') }}" class="auth-form">
+                    <input type="hidden" name="next" value="{{ request.path }}">
+
+                    <label for="modal-login-email">Email</label>
+                    <input id="modal-login-email" name="email" type="email" placeholder="you@example.com" required>
+
+                    <label for="modal-login-password">Password</label>
+                    <input id="modal-login-password" name="password" type="password" placeholder="••••••••" required>
+
+                    <button type="submit" class="btn btn-accent btn-block">Sign In</button>
+                </form>
+
+                <p class="form-foot">New here? <a href="#" class="switch-to-signup">Create an account →</a></p>
+            </div>
+
+            <div class="modal-panel" id="signupPanel" hidden>
+                <h2>Create account</h2>
+                <p class="auth-sub">Takes less than a minute.</p>
+
+                <form method="post" action="{{ url_for('signup') }}" class="auth-form">
+                    <label for="modal-signup-name">Name</label>
+                    <input id="modal-signup-name" name="name" type="text" placeholder="Jane Doe" required>
+
+                    <label for="modal-signup-email">Email</label>
+                    <input id="modal-signup-email" name="email" type="email" placeholder="you@example.com" required>
+
+                    <label for="modal-signup-password">Password</label>
+                    <input id="modal-signup-password" name="password" type="password" placeholder="At least 8 characters" required minlength="8">
+
+                    <label for="modal-confirm-password">Confirm password</label>
+                    <input id="modal-confirm-password" name="confirm_password" type="password" placeholder="Re-enter your password" required minlength="8">
+
+                    <button type="submit" class="btn btn-accent btn-block">Create Account</button>
+                </form>
+
+                <p class="form-foot">Already have an account? <a href="#" class="switch-to-login">Sign in →</a></p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <footer class="site-footer">
         <div class="footer-container container">
